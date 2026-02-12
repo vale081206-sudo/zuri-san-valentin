@@ -6,6 +6,7 @@
 <title>Zuri 💜</title>
 
 <style>
+/* ===== ESTILOS GENERALES ===== */
 body{
   margin:0;
   padding:0;
@@ -14,11 +15,12 @@ body{
   overflow-x:hidden;
   background: linear-gradient(135deg,#5f0a87,#ff4da6);
   color:white;
+  cursor: url('https://cdn-icons-png.flaticon.com/512/833/833472.png'), auto; /* cursor corazón */
 }
 
 /* CONTENIDO */
 .container{
-  margin-top:60px;
+  margin-top:50px;
   padding:20px;
 }
 
@@ -26,6 +28,13 @@ body{
 h1{
   font-size:2.8rem;
   margin-bottom:10px;
+  animation:shake 2s infinite;
+}
+
+@keyframes shake{
+  0%, 100%{transform:translateX(0);}
+  25%{transform:translateX(-5px);}
+  75%{transform:translateX(5px);}
 }
 
 h2{
@@ -36,22 +45,24 @@ h2{
 /* BOTONES */
 .buttons button{
   padding:15px 35px;
-  font-size:1.2rem;
+  font-size:1.3rem;
   border:none;
-  border-radius:40px;
+  border-radius:50px;
   cursor:pointer;
   margin:15px;
-  transition:0.3s ease;
+  transition:0.3s ease, transform 0.2s ease;
 }
 
 #yesBtn{
   background:#ff66c4;
   color:white;
+  box-shadow:0 0 15px #fff;
 }
 
 #noBtn{
   background:white;
   color:#5f0a87;
+  box-shadow:0 0 10px #ff66c4;
 }
 
 #segura{
@@ -71,9 +82,15 @@ h2{
   margin-top:20px;
   font-size:1.4rem;
   display:none;
+  animation:fadeIn 1s forwards;
 }
 
-/* GALERÍA SIEMPRE VISIBLE */
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+/* GALERÍA RESPONSIVE Y ANIMADA */
 .gallery{
   margin-top:40px;
   display:flex;
@@ -83,29 +100,57 @@ h2{
 }
 
 .gallery img{
-  width:180px;
-  height:240px;
+  width:calc(33% - 15px);
+  max-width:180px;
+  height:auto;
   object-fit:cover;
   border-radius:20px;
   box-shadow:0 0 25px rgba(255,255,255,0.6);
-  transition:0.4s;
+  transition:0.4s, transform 0.3s;
 }
 
 .gallery img:hover{
-  transform:scale(1.07);
+  transform:scale(1.1) rotate(-2deg);
 }
 
-/* CORAZONES FLOTANDO */
+@media (max-width:768px){
+  .gallery img{
+    width:45%;
+    max-width:150px;
+  }
+}
+
+/* CORAZONES FLOTANDO Y SEGUIDORES DEL CURSOR */
 .heart{
   position:fixed;
   font-size:20px;
   animation:float 8s linear infinite;
   opacity:0.7;
+  pointer-events:none;
 }
 
 @keyframes float{
   0%{transform:translateY(100vh);}
   100%{transform:translateY(-10vh);}
+}
+
+/* BOTÓN MÚSICA */
+#playMusicBtn{
+  margin-top:15px; 
+  padding:12px 25px; 
+  border:none; 
+  border-radius:40px; 
+  background:#fff; 
+  color:#5f0a87; 
+  cursor:pointer;
+  font-size:1rem;
+  box-shadow:0 0 15px #fff;
+  transition:0.3s;
+}
+
+#playMusicBtn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 25px #fff;
 }
 </style>
 </head>
@@ -117,8 +162,8 @@ h2{
   <h2>¿Quieres ser mi San Valentín? 💕</h2>
 
   <div class="buttons" id="buttons">
-    <button id="yesBtn">Sí 💜</button>
-    <button id="noBtn">No 😢</button>
+    <button id="yesBtn" aria-label="Sí, quiero ser tu San Valentín">Sí 💜</button>
+    <button id="noBtn" aria-label="No 😢">No 😢</button>
   </div>
 
   <div id="segura">SEGURAAA 💜</div>
@@ -126,13 +171,13 @@ h2{
   <div id="loveMessage">
     Sabía que dirías que sí 🥺💜  
     <p>Con amor, Valentino 💗</p>
+    <button id="playMusicBtn">🎵 Reproducir música</button>
   </div>
 
-  <!-- FOTOS VISIBLES DESDE EL INICIO -->
   <div class="gallery">
-    <img src="foto1.jpg">
-    <img src="foto2.jpg">
-    <img src="foto3.jpg">
+    <img src="foto1.jpg" alt="Foto 1">
+    <img src="foto2.jpg" alt="Foto 2">
+    <img src="foto3.jpg" alt="Foto 3">
   </div>
 </div>
 
@@ -142,21 +187,26 @@ const btnYes = document.getElementById("yesBtn");
 const segura = document.getElementById("segura");
 const loveMessage = document.getElementById("loveMessage");
 const buttons = document.getElementById("buttons");
+const playMusicBtn = document.getElementById("playMusicBtn");
 
 let size = 1;
 let noAttempts = 0;
 
-/* BOTÓN NO ESCAPA */
+/* ===== BOTÓN NO ESCAPA MÁS RÁPIDO ===== */
 function moveButton(){
-  const width = window.innerWidth - btnNo.offsetWidth;
-  const height = window.innerHeight - btnNo.offsetHeight;
+  const width = Math.max(window.innerWidth - btnNo.offsetWidth - 20, 0);
+  const height = Math.max(window.innerHeight - btnNo.offsetHeight - 20, 0);
+
+  // Velocidad aumenta con intentos
+  const speed = 20 + noAttempts*10;
 
   btnNo.style.position="fixed";
   btnNo.style.left=Math.random()*width+"px";
   btnNo.style.top=Math.random()*height+"px";
 
-  size+=0.15;
-  btnYes.style.transform=`scale(${size})`;
+  // Botón Sí crece y vibra
+  size += 0.15;
+  btnYes.style.transform=`scale(${size}) rotate(${Math.random()*10-5}deg)`;
 
   noAttempts++;
 
@@ -168,35 +218,53 @@ function moveButton(){
 btnNo.addEventListener("mouseenter",moveButton);
 btnNo.addEventListener("click",moveButton);
 
-/* BOTÓN SÍ */
+/* ===== BOTÓN SÍ ===== */
+btnYes.addEventListener("mouseenter",()=>{
+  btnYes.style.transform=`scale(${size*1.1}) rotate(-3deg)`;
+});
+btnYes.addEventListener("mouseleave",()=>{
+  btnYes.style.transform=`scale(${size})`;
+});
+
 btnYes.addEventListener("click",()=>{
   buttons.style.display="none";
   loveMessage.style.display="block";
-  startMusic();
 });
 
-/* MÚSICA X19X */
-function startMusic(){
-  const iframe=document.createElement("iframe");
-  iframe.src="https://www.youtube.com/embed/y5AZzTdbQSM?autoplay=1&loop=1&playlist=y5AZzTdbQSM";
-  iframe.allow="autoplay";
-  iframe.style.display="none";
-  document.body.appendChild(iframe);
-}
+/* ===== REPRODUCIR MÚSICA ===== */
+let musicStarted = false;
+playMusicBtn.addEventListener("click", ()=>{
+  if(!musicStarted){
+    const iframe = document.createElement("iframe");
+    iframe.src = "https://www.youtube.com/embed/y5AZzTdbQSM?autoplay=1&loop=1&playlist=y5AZzTdbQSM";
+    iframe.allow = "autoplay";
+    iframe.style.display="none";
+    document.body.appendChild(iframe);
+    musicStarted = true;
+    playMusicBtn.style.display="none";
+  }
+});
 
-/* CORAZONES */
-function createHeart(){
-  const heart=document.createElement("div");
+/* ===== CORAZONES FLOTANDO Y SEGUIDORES DEL CURSOR ===== */
+function createHeart(x,y){
+  const heart = document.createElement("div");
   heart.classList.add("heart");
-  heart.innerHTML=Math.random()>0.5?"💜":"💕";
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.fontSize=(15+Math.random()*25)+"px";
+  heart.innerHTML = Math.random() > 0.5 ? "💜" : "💕";
+  heart.style.left = x ? x+"px" : Math.random()*100+"vw";
+  heart.style.top = y ? y+"px" : "100vh";
+  heart.style.fontSize = (15 + Math.random()*25)+"px";
   document.body.appendChild(heart);
 
   setTimeout(()=>{heart.remove();},8000);
 }
 
-setInterval(createHeart,400);
+// Corazones aleatorios flotando
+setInterval(()=>{ createHeart(); }, 400);
+
+// Corazones al seguir el cursor
+document.addEventListener("mousemove",(e)=>{
+  if(Math.random()<0.2){ createHeart(e.clientX,e.clientY); }
+});
 </script>
 
 </body>
