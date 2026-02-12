@@ -5,228 +5,177 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zuri 💜</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
-
 <style>
 body{
-margin:0;
-font-family:'Montserrat',sans-serif;
-background:linear-gradient(-45deg,#5f0a87,#a4508b,#ff758c,#ff7eb3);
-background-size:400% 400%;
-animation:fondo 12s ease infinite;
-color:white;
-overflow-x:hidden;
+  margin:0;
+  padding:0;
+  font-family: 'Arial', sans-serif;
+  overflow:hidden;
+  text-align:center;
+  background: linear-gradient(135deg,#6a0dad,#ff4da6);
+  color:white;
 }
 
-@keyframes fondo{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-.seccion{
-max-width:900px;
-margin:40px auto;
-padding:30px;
-border-radius:20px;
-background:rgba(255,255,255,0.15);
-backdrop-filter:blur(15px);
-box-shadow:0 0 30px rgba(0,0,0,0.3);
-text-align:center;
+/* BLOQUE PRINCIPAL */
+.container{
+  position:relative;
+  top:25vh;
+  z-index:2;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  padding:40px;
+  border-radius:25px;
+  width:90%;
+  max-width:400px;
+  margin:auto;
+  box-shadow:0 0 40px rgba(255,255,255,0.3);
 }
 
 h1{
-font-family:'Playfair Display',serif;
-font-size:3rem;
-margin-bottom:10px;
+  font-size:2.5rem;
+  margin-bottom:10px;
 }
 
 h2{
-font-weight:300;
+  font-size:1.4rem;
+  margin-bottom:30px;
 }
 
-.galeria{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
-margin-top:20px;
+.buttons button{
+  padding:15px 30px;
+  font-size:1.1rem;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  margin:10px;
+  transition:0.3s;
 }
 
-.galeria img{
-width:250px;
-height:320px;
-object-fit:cover;
-border-radius:20px;
-box-shadow:0 0 20px #ff69b4;
-transition:0.4s;
+#yesBtn{
+  background:#ff66c4;
+  color:white;
 }
 
-.galeria img:hover{
-transform:scale(1.05);
+#noBtn{
+  background:white;
+  color:#6a0dad;
 }
 
-button{
-padding:15px 35px;
-font-size:18px;
-border:none;
-border-radius:40px;
-margin:15px;
-cursor:pointer;
-transition:0.3s;
+#segura{
+  margin-top:30px;
+  font-size:2.5rem;
+  font-weight:bold;
+  display:none;
+  animation:pop 0.6s ease forwards;
 }
 
-.si{
-background:#ff4d94;
-color:white;
-box-shadow:0 0 20px #ff4d94;
+.from{
+  font-size:1rem;
+  margin-top:10px;
 }
 
-.no{
-background:#6a0dad;
-color:white;
-position:relative;
+@keyframes pop{
+  0%{transform:scale(0);}
+  100%{transform:scale(1);}
 }
 
-#contador{
-font-size:18px;
-margin-top:10px;
+/* CORAZONES */
+.heart{
+  position:fixed;
+  font-size:20px;
+  animation:float 8s linear infinite;
+  opacity:0.7;
 }
 
-.corazon{
-position:fixed;
-animation:flotar 6s linear infinite;
-pointer-events:none;
+@keyframes float{
+  0%{transform:translateY(100vh);}
+  100%{transform:translateY(-10vh);}
 }
 
-@keyframes flotar{
-0%{transform:translateY(100vh);opacity:1;}
-100%{transform:translateY(-10vh);opacity:0;}
-}
-
-#pantallaFinal{
-display:none;
-text-align:center;
-padding:50px 20px;
-}
-
-.carta{
-max-width:700px;
-margin:30px auto;
-padding:40px;
-border-radius:25px;
-background:rgba(255,255,255,0.9);
-color:#6a0dad;
-font-family:'Playfair Display',serif;
-box-shadow:0 0 40px rgba(0,0,0,0.4);
-animation:aparecer 1s ease forwards;
-}
-
-@keyframes aparecer{
-from{opacity:0;transform:scale(0.8);}
-to{opacity:1;transform:scale(1);}
-}
-
-iframe{
-display:none;
+/* IFRAME OCULTO */
+.music{
+  display:none;
 }
 </style>
 </head>
 
 <body>
 
-<div id="contenidoInicial">
+<div class="container">
+  <h1>💜 Zuri 💜</h1>
+  <h2>¿Quieres ser mi San Valentín? 💕</h2>
 
-<div class="seccion">
-<h1>Zuri 💜</h1>
-<h2>¿Quieres ser mi San Valentín?</h2>
-<p>— Valentino —</p>
-<div id="contador"></div>
+  <div class="buttons">
+    <button id="yesBtn">Sí 💜</button>
+    <button id="noBtn">No 😢</button>
+  </div>
+
+  <div id="segura">
+    SEGURAAA 💜💜💜
+    <p class="from">Con amor, Valentino 💗</p>
+  </div>
 </div>
 
-<div class="seccion">
-<div class="galeria">
-<img src="foto1.jpg">
-<img src="foto2.jpg">
-<img src="foto3.jpg">
+<div class="music" id="musicContainer">
+  <iframe id="musicFrame"
+    width="0"
+    height="0"
+    frameborder="0"
+    allow="autoplay"
+    allowfullscreen>
+  </iframe>
 </div>
-</div>
-
-<div class="seccion">
-<button class="si" onclick="aceptar()">Sí 💖</button>
-<button class="no" onmouseover="mover(this)">No 😢</button>
-</div>
-
-</div>
-
-<div id="pantallaFinal">
-<h1>💜 SABÍA QUE DIRÍAS QUE SÍ 💜</h1>
-
-<div class="carta">
-Para ti, Zuri 💌 <br><br>
-No quiero un 14 cualquiera…  
-Quiero uno contigo.  
-Y si me dejas… todos los que vengan después también.  
-<br><br>
-Con cariño,  
-Valentino 💜
-</div>
-</div>
-
-<!-- X19X Feid -->
-<iframe id="ytplayer"
-src="https://www.youtube.com/embed/6zYl5z1sVhA?enablejsapi=1">
-</iframe>
 
 <script>
+const btnNo = document.getElementById("noBtn");
+const btnYes = document.getElementById("yesBtn");
+const segura = document.getElementById("segura");
+const musicFrame = document.getElementById("musicFrame");
+const musicContainer = document.getElementById("musicContainer");
 
-// CONTADOR
-const fechaObjetivo = new Date("Feb 14, 2026 00:00:00").getTime();
-setInterval(function(){
-let ahora = new Date().getTime();
-let distancia = fechaObjetivo - ahora;
-let dias = Math.floor(distancia/(1000*60*60*24));
-let horas = Math.floor((distancia%(1000*60*60*24))/(1000*60*60));
-let minutos = Math.floor((distancia%(1000*60*60))/(1000*60));
-let segundos = Math.floor((distancia%(1000*60))/1000);
-document.getElementById("contador").innerHTML =
-"Faltan " + dias + "d " + horas + "h " + minutos + "m " + segundos + "s 💜";
-},1000);
+let size = 1;
 
-// BOTÓN NO
-function mover(boton){
-boton.style.position="absolute";
-boton.style.top=Math.random()*80+"vh";
-boton.style.left=Math.random()*80+"vw";
+/* BOTÓN NO HUYE */
+function moveButton(){
+  const width = window.innerWidth - btnNo.offsetWidth;
+  const height = window.innerHeight - btnNo.offsetHeight;
+
+  const randomX = Math.random()*width;
+  const randomY = Math.random()*height;
+
+  btnNo.style.position="fixed";
+  btnNo.style.left=randomX+"px";
+  btnNo.style.top=randomY+"px";
+
+  size+=0.1;
+  btnYes.style.transform=`scale(${size})`;
 }
 
-// CORAZONES CONSTANTES
-function corazones(){
-const c=document.createElement("div");
-c.classList.add("corazon");
-c.innerHTML=Math.random()>0.5?"💜":"💖";
-c.style.left=Math.random()*100+"vw";
-c.style.fontSize=(Math.random()*20+15)+"px";
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),6000);
-}
-setInterval(corazones,400);
+btnNo.addEventListener("mouseenter",moveButton);
+btnNo.addEventListener("click",moveButton);
 
-// ACEPTAR
-function aceptar(){
-document.getElementById("contenidoInicial").style.display="none";
-document.getElementById("pantallaFinal").style.display="block";
+/* BOTÓN SÍ */
+btnYes.addEventListener("click",()=>{
+  segura.style.display="block";
 
-// explosión
-for(let i=0;i<30;i++){
-setTimeout(corazones, i*100);
+  musicContainer.style.display="block";
+  musicFrame.src="https://www.youtube.com/embed/y5AZzTdbQSM?autoplay=1&loop=1&playlist=y5AZzTdbQSM";
+});
+
+/* CORAZONES DINÁMICOS */
+function createHeart(){
+  const heart=document.createElement("div");
+  heart.classList.add("heart");
+  heart.innerHTML=Math.random()>0.5?"💜":"💕";
+  heart.style.left=Math.random()*100+"vw";
+  heart.style.fontSize=(15+Math.random()*25)+"px";
+  heart.style.animationDuration=(5+Math.random()*5)+"s";
+  document.body.appendChild(heart);
+
+  setTimeout(()=>{heart.remove();},8000);
 }
 
-// música
-let player=document.getElementById("ytplayer");
-player.style.display="block";
-player.src += "&autoplay=1&loop=1&playlist=6zYl5z1sVhA";
-}
+setInterval(createHeart,300);
 </script>
 
 </body>
