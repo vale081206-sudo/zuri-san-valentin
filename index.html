@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zuri 💜</title>
 
+<!-- Fuente bonita -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
 /* ===== ESTILOS GENERALES ===== */
 body{
   margin:0;
   padding:0;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Poppins', sans-serif;
   text-align:center;
   overflow-x:hidden;
   background: linear-gradient(135deg,#5f0a87,#ff4da6);
@@ -51,6 +54,8 @@ h2{
   cursor:pointer;
   margin:15px;
   transition:0.3s ease, transform 0.2s ease;
+  position:relative;
+  z-index:1000; /* para que no quede detrás */
 }
 
 #yesBtn{
@@ -83,11 +88,6 @@ h2{
   font-size:1.4rem;
   display:none;
   animation:fadeIn 1s forwards;
-}
-
-@keyframes fadeIn{
-  from{opacity:0;}
-  to{opacity:1;}
 }
 
 /* GALERÍA RESPONSIVE Y ANIMADA */
@@ -197,9 +197,6 @@ function moveButton(){
   const width = Math.max(window.innerWidth - btnNo.offsetWidth - 20, 0);
   const height = Math.max(window.innerHeight - btnNo.offsetHeight - 20, 0);
 
-  // Velocidad aumenta con intentos
-  const speed = 20 + noAttempts*10;
-
   btnNo.style.position="fixed";
   btnNo.style.left=Math.random()*width+"px";
   btnNo.style.top=Math.random()*height+"px";
@@ -229,6 +226,7 @@ btnYes.addEventListener("mouseleave",()=>{
 btnYes.addEventListener("click",()=>{
   buttons.style.display="none";
   loveMessage.style.display="block";
+  segura.style.display="none"; // desaparece al presionar "Sí"
 });
 
 /* ===== REPRODUCIR MÚSICA ===== */
