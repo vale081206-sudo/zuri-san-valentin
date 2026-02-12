@@ -19,6 +19,19 @@ body{
   background: linear-gradient(135deg,#5f0a87,#ff4da6);
   color:white;
   cursor: url('https://cdn-icons-png.flaticon.com/512/833/833472.png'), auto; /* cursor corazón */
+  transition: background 10s linear infinite;
+}
+
+/* Animación fondo */
+@keyframes bgShift{
+  0%{background: linear-gradient(135deg,#5f0a87,#ff4da6);}
+  25%{background: linear-gradient(135deg,#ff4da6,#ffb6c1);}
+  50%{background: linear-gradient(135deg,#ffb6c1,#5f0a87);}
+  75%{background: linear-gradient(135deg,#5f0a87,#ffb6c1);}
+  100%{background: linear-gradient(135deg,#5f0a87,#ff4da6);}
+}
+body{
+  animation:bgShift 60s infinite alternate;
 }
 
 /* CONTENIDO */
@@ -120,18 +133,35 @@ h2{
   }
 }
 
-/* CORAZONES FLOTANDO Y SEGUIDORES DEL CURSOR */
-.heart{
+/* CORAZONES FLOTANDO, BRILLOS Y SEGUIDORES DEL CURSOR */
+.heart, .spark{
   position:fixed;
+  pointer-events:none;
+  user-select:none;
+}
+
+.heart{
   font-size:20px;
   animation:float 8s linear infinite;
   opacity:0.7;
-  pointer-events:none;
+}
+
+.spark{
+  font-size:10px;
+  opacity:0.8;
+  color:#fff;
+  animation:twinkle 1.2s linear infinite;
 }
 
 @keyframes float{
   0%{transform:translateY(100vh);}
   100%{transform:translateY(-10vh);}
+}
+
+@keyframes twinkle{
+  0%{opacity:0.4; transform: scale(0.8);}
+  50%{opacity:1; transform: scale(1);}
+  100%{opacity:0.4; transform: scale(0.8);}
 }
 
 /* BOTÓN MÚSICA */
@@ -230,7 +260,7 @@ btnYes.addEventListener("click",()=>{
 });
 
 /* ===== BOTÓN MÚSICA QUE LLEVA A YOUTUBE ===== */
-const youtubeLink = "https://www.youtube.com/watch?v=y5AZzTdbQSM"; // tu canción
+const youtubeLink = "https://www.youtube.com/watch?v=y5AZzTdbQSM"; 
 playMusicBtn.addEventListener("click", () => {
   playMusicBtn.innerText = "Te dedico esta canción 💜🎵";
   window.open(youtubeLink, "_blank");
@@ -245,8 +275,19 @@ function createHeart(x,y){
   heart.style.top = y ? y+"px" : "100vh";
   heart.style.fontSize = (15 + Math.random()*25)+"px";
   document.body.appendChild(heart);
-
   setTimeout(()=>{heart.remove();},8000);
+
+  // Brillos aleatorios cerca del corazón
+  for(let i=0;i<2;i++){
+    const spark = document.createElement("div");
+    spark.classList.add("spark");
+    spark.innerHTML = "✨";
+    spark.style.left = (parseFloat(heart.style.left)+Math.random()*30-15)+"px";
+    spark.style.top = (parseFloat(heart.style.top)+Math.random()*30-15)+"px";
+    spark.style.fontSize = (5+Math.random()*10)+"px";
+    document.body.appendChild(spark);
+    setTimeout(()=>{spark.remove();},1200);
+  }
 }
 
 // Corazones aleatorios flotando
