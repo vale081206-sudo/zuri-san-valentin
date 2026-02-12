@@ -9,20 +9,18 @@
 body{
   margin:0;
   padding:0;
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   overflow:hidden;
   text-align:center;
   background: linear-gradient(135deg,#6a0dad,#ff4da6);
   color:white;
 }
 
-/* BLOQUE PRINCIPAL */
 .container{
   position:relative;
   top:25vh;
-  z-index:2;
   background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
   padding:40px;
   border-radius:25px;
   width:90%;
@@ -31,15 +29,8 @@ body{
   box-shadow:0 0 40px rgba(255,255,255,0.3);
 }
 
-h1{
-  font-size:2.5rem;
-  margin-bottom:10px;
-}
-
-h2{
-  font-size:1.4rem;
-  margin-bottom:30px;
-}
+h1{font-size:2.5rem;}
+h2{margin-bottom:30px;}
 
 .buttons button{
   padding:15px 30px;
@@ -62,11 +53,17 @@ h2{
 }
 
 #segura{
-  margin-top:30px;
+  margin-top:25px;
   font-size:2.5rem;
   font-weight:bold;
   display:none;
   animation:pop 0.6s ease forwards;
+}
+
+#loveMessage{
+  margin-top:20px;
+  font-size:1.4rem;
+  display:none;
 }
 
 .from{
@@ -79,22 +76,16 @@ h2{
   100%{transform:scale(1);}
 }
 
-/* CORAZONES */
 .heart{
   position:fixed;
   font-size:20px;
-  animation:float 8s linear infinite;
-  opacity:0.7;
+  animation:float linear infinite;
+  opacity:0.8;
 }
 
 @keyframes float{
   0%{transform:translateY(100vh);}
   100%{transform:translateY(-10vh);}
-}
-
-/* IFRAME OCULTO */
-.music{
-  display:none;
 }
 </style>
 </head>
@@ -105,37 +96,32 @@ h2{
   <h1>💜 Zuri 💜</h1>
   <h2>¿Quieres ser mi San Valentín? 💕</h2>
 
-  <div class="buttons">
+  <div class="buttons" id="buttons">
     <button id="yesBtn">Sí 💜</button>
     <button id="noBtn">No 😢</button>
   </div>
 
-  <div id="segura">
-    SEGURAAA 💜💜💜
+  <div id="loveMessage">
+    Sabía que dirías que sí 🥺💜  
     <p class="from">Con amor, Valentino 💗</p>
   </div>
-</div>
 
-<div class="music" id="musicContainer">
-  <iframe id="musicFrame"
-    width="0"
-    height="0"
-    frameborder="0"
-    allow="autoplay"
-    allowfullscreen>
-  </iframe>
+  <div id="segura">
+    SEGURAAA 💜
+  </div>
 </div>
 
 <script>
 const btnNo = document.getElementById("noBtn");
 const btnYes = document.getElementById("yesBtn");
 const segura = document.getElementById("segura");
-const musicFrame = document.getElementById("musicFrame");
-const musicContainer = document.getElementById("musicContainer");
+const loveMessage = document.getElementById("loveMessage");
+const buttons = document.getElementById("buttons");
 
 let size = 1;
+let noAttempts = 0;
 
-/* BOTÓN NO HUYE */
+/* ===== BOTÓN NO HUYE ===== */
 function moveButton(){
   const width = window.innerWidth - btnNo.offsetWidth;
   const height = window.innerHeight - btnNo.offsetHeight;
@@ -147,35 +133,56 @@ function moveButton(){
   btnNo.style.left=randomX+"px";
   btnNo.style.top=randomY+"px";
 
-  size+=0.1;
+  size+=0.15;
   btnYes.style.transform=`scale(${size})`;
+
+  noAttempts++;
+
+  if(noAttempts >= 5){
+    segura.style.display="block";
+  }
 }
 
 btnNo.addEventListener("mouseenter",moveButton);
 btnNo.addEventListener("click",moveButton);
 
-/* BOTÓN SÍ */
+/* ===== BOTÓN SÍ ===== */
 btnYes.addEventListener("click",()=>{
-  segura.style.display="block";
+  buttons.style.display="none";
+  loveMessage.style.display="block";
 
-  musicContainer.style.display="block";
-  musicFrame.src="https://www.youtube.com/embed/y5AZzTdbQSM?autoplay=1&loop=1&playlist=y5AZzTdbQSM";
+  startMusic();
+  startHearts(150);
 });
 
-/* CORAZONES DINÁMICOS */
-function createHeart(){
+/* ===== MÚSICA FUNCIONAL (sin bloquear autoplay) ===== */
+function startMusic(){
+  const iframe = document.createElement("iframe");
+  iframe.src="https://www.youtube.com/embed/y5AZzTdbQSM?autoplay=1&loop=1&playlist=y5AZzTdbQSM";
+  iframe.allow="autoplay";
+  iframe.style.display="none";
+  document.body.appendChild(iframe);
+}
+
+/* ===== CORAZONES ===== */
+function createHeart(speed){
   const heart=document.createElement("div");
   heart.classList.add("heart");
   heart.innerHTML=Math.random()>0.5?"💜":"💕";
   heart.style.left=Math.random()*100+"vw";
   heart.style.fontSize=(15+Math.random()*25)+"px";
-  heart.style.animationDuration=(5+Math.random()*5)+"s";
+  heart.style.animationDuration=(speed/1000)+"s";
   document.body.appendChild(heart);
 
-  setTimeout(()=>{heart.remove();},8000);
+  setTimeout(()=>{heart.remove();},speed);
 }
 
-setInterval(createHeart,300);
+function startHearts(speed){
+  setInterval(()=>createHeart(speed),200);
+}
+
+/* Corazones suaves iniciales */
+startHearts(8000);
 </script>
 
 </body>
